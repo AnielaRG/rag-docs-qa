@@ -9,6 +9,7 @@ import { z } from "zod";
 import { chatModel } from "@/lib/models";
 import { retrieve } from "@/lib/retrieve";
 import { buildSystemPrompt } from "@/lib/prompt";
+import { Source } from "@/lib/types";
 
 export const maxDuration = 30;
 
@@ -83,13 +84,16 @@ export async function POST(req: Request) {
       messageMetadata: ({ part }) =>
         part.type === "start"
           ? {
-              sources: hits.map((h, i) => ({
-                n: i + 1,
-                source: h.source,
-                heading: h.heading,
-                text: h.text,
-                score: Number(h.score.toFixed(3)),
-              })),
+              sources: hits.map(
+                (h, i): Source => ({
+                  id: h.id,
+                  n: i + 1,
+                  source: h.source,
+                  heading: h.heading,
+                  text: h.text,
+                  score: Number(h.score.toFixed(3)),
+                }),
+              ),
             }
           : undefined,
     }),
