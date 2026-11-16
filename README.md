@@ -38,3 +38,22 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Known limitations
 
 **Oversized paragraphs are not split.** The chunker splits documents on paragraph boundaries and merges paragraphs up to `maxChars` (default 1200) with a `overlapChars` (default 200) overlap. A single paragraph longer than `maxChars` becomes one oversized chunk. This is fine for the demo docs, where paragraphs are short, but long unbroken text (e.g. pasted logs or tables) could produce chunks that embed less precisely. A possible fix is a fallback that splits oversized paragraphs on sentence boundaries.
+
+## Retrieval sanity check
+
+`scripts/search-test.ts` embeds a few test questions and prints the top 3 chunks
+(source › heading, cosine score) from `data/index.json`.
+
+| Question                                    | Top match                                    | Score |
+| ------------------------------------------- | -------------------------------------------- | ----- |
+| Ile dni wcześniej zgłosić tygodniowy urlop? | urlopy.md › Jak zgłosić urlop                | 0.707 |
+| Czy mogę zrobić deploy w piątek?            | deploy.md › Okna wdrożeniowe                 | 0.667 |
+| Zgubiłem laptopa, co robić?                 | sprzet-i-bezpieczenstwo.md › Zgubiony sprzęt | 0.591 |
+| Od kiedy mogę mieć dyżur on-call?           | dyzury-i-incydenty.md › Kto pełni dyżury     | 0.609 |
+| Jaka jest stolica Peru? _(off-topic)_       | praca-zdalna.md › Biura                      | 0.266 |
+| Jak ugotować pierogi? _(off-topic)_         | onboarding.md › Pierwszy tydzień             | 0.289 |
+
+Relevant top-1 matches score ≥ 0.59, off-topic questions ≤ 0.29.
+Based on this gap, `minScore` is set to **0.45**. It also filters out weak,
+unrelated matches such as `urlopy.md › Zaległy urlop` (0.423) for the lost-laptop question.
+Typos and missing Polish diacritics ("zglosic", "piatek") don't affect retrieval.
