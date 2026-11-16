@@ -39,6 +39,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 **Oversized paragraphs are not split.** The chunker splits documents on paragraph boundaries and merges paragraphs up to `maxChars` (default 1200) with a `overlapChars` (default 200) overlap. A single paragraph longer than `maxChars` becomes one oversized chunk. This is fine for the demo docs, where paragraphs are short, but long unbroken text (e.g. pasted logs or tables) could produce chunks that embed less precisely. A possible fix is a fallback that splits oversized paragraphs on sentence boundaries.
 
+- **In-memory JSON index.** Embeddings are stored in `data/index.json` (~1–2 MB) and imported into the server bundle; retrieval is a brute-force cosine similarity over all chunks. This is fast enough for a few dozen chunks, but wouldn't scale to thousands of documents. The next step would be a vector database (e.g. Postgres + pgvector) with an approximate nearest-neighbour index.
+
+## How retrieval works
+
+`lib/retrieve.ts` embeds the question with the same model used for indexing, scores every chunk with cosine similarity, drops chunks below `minScore` (0.45), and returns the top `topK` (4) hits with their source file and section heading.
+
+If the index was built with a different embedding model than the app uses, the module throws on import — mixing vectors from two models would silently produce meaningless scores.
+
 ## Retrieval sanity check
 
 `scripts/search-test.ts` embeds a few test questions and prints the top 3 chunks
@@ -54,6 +62,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 | Jak ugotować pierogi? _(off-topic)_         | onboarding.md › Pierwszy tydzień             | 0.289 |
 
 Relevant top-1 matches score ≥ 0.59, off-topic questions ≤ 0.29.
-Based on this gap, `minScore` is set to **0.45**. It also filters out weak,
-unrelated matches such as `urlopy.md › Zaległy urlop` (0.423) for the lost-laptop question.
+Based on this gap, `minScore` is set to **0.45**. It also filters out weak, unrelated matches such as `urlopy.md › Zaległy urlop` (0.423) for the lost-laptop question.
 Typos and missing Polish diacritics ("zglosic", "piatek") don't affect retrieval.
