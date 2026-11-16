@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Sources } from "./sources";
-import type { Source, ChatMetadata } from "@/lib/types";
+import type { ChatMetadata } from "@/lib/types";
 import { strings } from "@/lib/strings";
 
 export function Chat() {
