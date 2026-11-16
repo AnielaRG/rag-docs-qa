@@ -104,7 +104,7 @@ export function Chat() {
           </Button>
         ) : (
           <Button type="submit" disabled={!input.trim()}>
-            {strings.chat.stop}
+            {strings.chat.send}
           </Button>
         )}
       </form>
