@@ -34,3 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Known limitations
+
+**Oversized paragraphs are not split.** The chunker splits documents on paragraph boundaries and merges paragraphs up to `maxChars` (default 1200) with a `overlapChars` (default 200) overlap. A single paragraph longer than `maxChars` becomes one oversized chunk. This is fine for the demo docs, where paragraphs are short, but long unbroken text (e.g. pasted logs or tables) could produce chunks that embed less precisely. A possible fix is a fallback that splits oversized paragraphs on sentence boundaries.
