@@ -1,7 +1,12 @@
 export const strings = {
   chat: {
-    title: "Zapytaj o dokumentację z kartoteki",
-    example: "Zadaj pytanie o dokumentację, np. „Jak zgłosić urlop?”",
+    title: "Docs Q&A: Kartoteka",
+    example: "Zadaj pytanie o dokumentację, np.",
+    exampleQuestion1: "„Jak zgłosić urlop?”",
+    exampleQuestion2: "„Czy mogę zrobić deploy w piatek?”",
+    exampleQuestion3:
+      "„Zgubiłem laptop, co mam zrobić? Od kiedy mogę mieć dyzur on-call?”",
+    exampleQuestion4: "„Jak ugotować pierogi?”",
     placeholder: "Twoje pytanie…",
     send: "Wyślij",
     stop: "Zatrzymaj",
@@ -9,6 +14,7 @@ export const strings = {
     error: "Coś poszło nie tak.",
     buttonTryAgain: "Spróbuj ponownie",
     question: "Pytanie",
+    stopped: "Generowanie zatrzymane",
   },
   sources: {
     title: (count: number) => `Źródła (${count})`,
