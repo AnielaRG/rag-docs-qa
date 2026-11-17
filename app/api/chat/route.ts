@@ -11,9 +11,8 @@ import { z } from "zod";
 import { chatModel } from "@/lib/models";
 import { retrieve } from "@/lib/retrieve";
 import { buildSystemPrompt } from "@/lib/prompt";
-import { Source } from "@/lib/types";
+import type { Source } from "@/lib/types";
 import { strings } from "@/lib/strings";
-import { error } from "console";
 
 export const maxDuration = 30;
 
@@ -24,7 +23,7 @@ const bodySchema = z.object({
     .array(
       z.looseObject({
         id: z.string(),
-        role: z.enum(["user", "assistant", "system"]),
+        role: z.enum(["user", "assistant"]),
         parts: z.array(z.looseObject({ type: z.string() })),
       }),
     )
@@ -71,7 +70,7 @@ function describeError(error: unknown): { status: number; message: string } {
 function errorResponse(status: number, message: string) {
   return new Response(message, {
     status,
-    headers: { "Content-Type": "text/plain; chatset=utf-8" },
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }
 
@@ -132,7 +131,7 @@ export async function POST(req: Request) {
             : undefined,
       }),
     });
-  } catch {
+  } catch (error) {
     const { status, message } = describeError(error);
     return errorResponse(status, message);
   }

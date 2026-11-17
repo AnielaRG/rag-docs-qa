@@ -20,6 +20,14 @@ The model answers **only from retrieved fragments**. If nothing relevant is foun
 
 Next.js (App Router) · React · TypeScript · Vercel AI SDK · OpenAI (embeddings + chat) · Tailwind CSS · shadcn/ui · zod · react-markdown
 
+## Key decisions
+
+- **JSON index + brute-force search** instead of a vector database: enough for ~50 chunks; pgvector/HNSW would be the next step for thousands of documents.
+- **Threshold and top-k chosen by measurement:** `minScore = 0.45`, `topK = 4`, hit rate 15/15 on the eval set (details below).
+- **Out-of-scope questions get no context.** Chunks below `minScore` are dropped, so the model receives an empty context and is instructed to say the answer isn't in the docs instead of guessing.
+- **Upstream API errors are translated, not forwarded** (e.g. OpenAI 401 → 503 for the client).
+- **System prompt is server-only.** Validation rejects `system` messages from the client, so the instructions can't be replaced through the API.
+
 ## How it works
 
 **1. Indexing (offline, `npm run index`)**
@@ -123,4 +131,8 @@ data/
 - **Oversized paragraphs are not split.** A single paragraph longer than `maxChars` becomes one oversized chunk. Fine for the demo docs; a fix would split such paragraphs on sentence boundaries.
 - **In-memory JSON index.** Brute-force search over `data/index.json` imported into the server bundle doesn't scale to thousands of documents. Next step: Postgres + pgvector with an approximate nearest-neighbour index.
 - **No rate limiting.** A public demo with a server-side API key can be abused. Current mitigation: a spending limit in the OpenAI dashboard. Next step: per-IP limits (e.g. Upstash Ratelimit).
-- **Limited conversation memory.** Only the last 6 messages are sent to the model, and retrieval uses only the latest question, so follow-ups like "and on Thursday?" may retrieve poorly.
+- **Limited conversation memory.** Only the last 6 messages are sent to the model, and retrieval uses only the latest question (no query rewriting), so follow-ups like "and on Thursday?" may retrieve poorly.
+- **No re-ranking or hybrid search.** Retrieval is pure vector similarity. Exact terms
+  like `SEV1` or `kd deploy` could be matched more reliably by combining it with keyword
+  search (BM25), and a re-ranker could reorder the top candidates more precisely.
+- **Prompt injection is mitigated, not prevented.** The system prompt is built only on the server; client-sent `system` messages are rejected by validation (zod allows only `user` and `assistant` roles). A crafted question could still try to override the instructions, but impact is limited: the model has no tools, no side effects, and only sees public demo documents.
