@@ -2,6 +2,7 @@ import { embed } from "ai";
 import index from "@/data/index.json";
 import { embeddingModel, EMBEDDING_MODEL_NAME } from "./models";
 import { cosineSimilarity } from "./similarity";
+import { MIN_SCORE, TOP_K } from "./consts";
 
 export type Hit = {
   id: string;
@@ -24,7 +25,10 @@ if (index.model !== EMBEDDING_MODEL_NAME) {
 
 export async function retrieve(
   question: string,
-  { topK = 4, minScore = 0.45 }: { topK?: number; minScore?: number } = {},
+  {
+    topK = TOP_K,
+    minScore = MIN_SCORE,
+  }: { topK?: number; minScore?: number } = {},
 ): Promise<Hit[]> {
   const { embedding } = await embed({ model: embeddingModel, value: question });
 

@@ -1,3 +1,5 @@
+import { MAX_CHARS } from "./consts";
+
 export type Chunk = {
   id: string;
   source: string;
@@ -40,7 +42,7 @@ function splitBySections(markdown: string) {
 export function chunkMarkDown(
   source: string,
   markdown: string,
-  { maxChars = 1200, overlapChars = 200 }: Options = {},
+  { maxChars = MAX_CHARS, overlapChars = 200 }: Options = {},
 ): Chunk[] {
   const chunks: Chunk[] = [];
   const sections = splitBySections(markdown);

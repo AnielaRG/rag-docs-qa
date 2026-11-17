@@ -85,3 +85,24 @@ Typos and missing Polish diacritics ("zglosic", "piatek") don't affect retrieval
   (`onError`), since the status code has already been sent.
 - On the client, the error is shown with a retry button (`regenerate()` from `useChat`).
 - All user-facing texts live in `lib/strings.ts`.
+
+## Retrieval evaluation
+
+`npm run eval` runs 15 questions from `data/eval.json` (12 answerable, 3 out-of-scope)
+and checks whether the expected source file is among the retrieved chunks
+(out-of-scope questions pass when nothing is retrieved). Parameters can be overridden:
+`npm run eval -- --minScore 0.35 --topK 2`.
+
+| minScore | topK  | maxChars | Hit rate  | Notes                                                    |
+| -------- | ----- | -------- | --------- | -------------------------------------------------------- |
+| **0.45** | **4** | **1200** | **15/15** | baseline (chosen)                                        |
+| 0.35     | 4     | 1200     | 15/15     | lets in irrelevant chunks (0.37–0.44)                    |
+| 0.55     | 2     | 1200     | 12/15     | drops correct answers scoring 0.53–0.55                  |
+| 0.45     | 2     | 1200     | 15/15     | correct file always in top 2                             |
+| 0.45     | 4     | 600      | 15/15     | more, smaller chunks; no gain                            |
+| 0.45     | 4     | 2000     | 15/15     | identical to 1200 (sections are shorter than 1200 chars) |
+
+The weakest correct top-1 match scores **0.53**; the strongest out-of-scope question
+scores **0.29**. `minScore = 0.45` sits between them with margin on both sides.
+`topK = 4` is kept (although 2 is enough for single questions) to leave room for
+multi-part questions, which this eval set does not cover.

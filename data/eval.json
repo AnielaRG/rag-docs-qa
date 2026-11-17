@@ -1,0 +1,53 @@
+[
+  {
+    "question": "Ile dni urlopu na żądanie mi przysługuje?",
+    "expectedSource": "urlopy.md"
+  },
+  {
+    "question": "Do kiedy muszę wykorzystać zaległy urlop?",
+    "expectedSource": "urlopy.md"
+  },
+  {
+    "question": "Ile kasy dostanę za tydzień dyżuru?",
+    "expectedSource": "dyzury-i-incydenty.md"
+  },
+  {
+    "question": "Jak szybko trzeba zareagować na awarię SEV1?",
+    "expectedSource": "dyzury-i-incydenty.md"
+  },
+  {
+    "question": "W ciągu ilu dni piszemy postmortem?",
+    "expectedSource": "dyzury-i-incydenty.md"
+  },
+  {
+    "question": "Kto zatwierdza pilną poprawkę na produkcji?",
+    "expectedSource": "deploy.md"
+  },
+  {
+    "question": "Kiedy w grudniu nie ma wdrożeń?",
+    "expectedSource": "deploy.md"
+  },
+  {
+    "question": "W jakich godzinach muszę być dostępny?",
+    "expectedSource": "praca-zdalna.md"
+  },
+  {
+    "question": "Czy mogę popracować miesiąc z Hiszpanii?",
+    "expectedSource": "praca-zdalna.md"
+  },
+  {
+    "question": "Co ile lat wymieniany jest komputer?",
+    "expectedSource": "sprzet-i-bezpieczenstwo.md"
+  },
+  {
+    "question": "Jak długie musi być hasło do menedżera haseł?",
+    "expectedSource": "sprzet-i-bezpieczenstwo.md"
+  },
+  {
+    "question": "O której mam przyjść pierwszego dnia?",
+    "expectedSource": "onboarding.md"
+  },
+  { "question": "Jaka jest stolica Peru?", "expectedSource": null },
+  { "question": "Jak ugotować pierogi?", "expectedSource": null },
+  { "question": "Kto wygrał mundial w 2022 roku?", "expectedSource": null }
+]
