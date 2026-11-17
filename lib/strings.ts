@@ -15,6 +15,7 @@ export const strings = {
     buttonRetry: "Spróbuj ponownie",
     question: "Pytanie",
     stopped: "Generowanie zatrzymane",
+    notFound: "Nie znaleziono tej informacji w dokumentach.",
   },
   sources: {
     title: (count: number) => `Źródła (${count})`,
