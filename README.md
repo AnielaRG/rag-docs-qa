@@ -64,3 +64,24 @@ If the index was built with a different embedding model than the app uses, the m
 Relevant top-1 matches score ≥ 0.59, off-topic questions ≤ 0.29.
 Based on this gap, `minScore` is set to **0.45**. It also filters out weak, unrelated matches such as `urlopy.md › Zaległy urlop` (0.423) for the lost-laptop question.
 Typos and missing Polish diacritics ("zglosic", "piatek") don't affect retrieval.
+
+## Error handling
+
+`app/api/chat/route.ts` separates client errors from server errors:
+
+| Situation                                                                       | Status | Message shown to the user                       |
+| ------------------------------------------------------------------------------- | ------ | ----------------------------------------------- |
+| Invalid JSON, wrong body shape (validated with zod), empty or too long question | 400    | specific reason (e.g. "Pytanie jest za długie") |
+| OpenAI rejects the API key (401/403)                                            | 503    | service temporarily unavailable                 |
+| OpenAI rate limit (429)                                                         | 429    | too many requests, try again shortly            |
+| Anything else                                                                   | 500    | generic server error                            |
+
+- Upstream errors are **translated, not forwarded**: a 401 from OpenAI is a server
+  misconfiguration, not an unauthenticated user, so the client gets 503.
+- Full error details (including OpenAI's message) are logged server-side only;
+  the browser never sees provider internals.
+- Errors before streaming starts (e.g. while embedding the question) return an HTTP
+  error response; errors during streaming are sent as an error event in the stream
+  (`onError`), since the status code has already been sent.
+- On the client, the error is shown with a retry button (`regenerate()` from `useChat`).
+- All user-facing texts live in `lib/strings.ts`.

@@ -12,7 +12,7 @@ export const strings = {
     stop: "Zatrzymaj",
     thinking: "Szukam w dokumentach...",
     error: "Coś poszło nie tak.",
-    buttonTryAgain: "Spróbuj ponownie",
+    buttonRetry: "Spróbuj ponownie",
     question: "Pytanie",
     stopped: "Generowanie zatrzymane",
   },
@@ -27,5 +27,8 @@ export const strings = {
     emptyQuestion: "Puste pytanie",
     questionTooLong: "Pytanie jest za długie",
     streamError: "Wystąpił błąd podczas generowania odpowiedzi.",
+    unavailable: "Usługa jest chwilowo niedostępna. Spróbuj później.",
+    rateLimited: "Za dużo zapytań. Spróbuj za chwilę.",
+    serverError: "Wystąpił błąd serwera. Spróbuj ponownie.",
   },
 } as const;

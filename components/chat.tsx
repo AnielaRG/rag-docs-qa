@@ -123,11 +123,13 @@ export function Chat() {
         {error && (
           <div
             role="alert"
-            className="rounded border border-destructive p-3 text-destructive"
+            className="flex items-center justify-between gap-3 rounded border border-destructive p-3"
           >
-            {strings.chat.error + " "}
-            <Button variant="link" onClick={() => regenerate()}>
-              {strings.chat.buttonTryAgain}
+            <span className="text-destructive">
+              {error.message || strings.chat.error}
+            </span>
+            <Button variant="outline" size="sm" onClick={() => regenerate()}>
+              {strings.chat.buttonRetry}
             </Button>
           </div>
         )}
