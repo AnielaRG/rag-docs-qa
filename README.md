@@ -4,8 +4,9 @@ A RAG (retrieval-augmented generation) app that answers questions about internal
 
 The model answers **only from retrieved fragments**. If nothing relevant is found, it says so instead of guessing.
 
-<!-- Live demo: https://… -->
-<!-- ![Screenshot](docs/screenshot.png) -->
+**Live demo:** https://rag-docs-qa-nine.vercel.app
+
+![Screenshot](docs/screenshot.png)
 
 ## Features
 
