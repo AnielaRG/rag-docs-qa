@@ -12,12 +12,18 @@ import { strings } from "@/lib/strings";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
+type ChatMessage = UIMessage<ChatMetadata>;
+
 const examples = [
   strings.chat.exampleQuestion1,
   strings.chat.exampleQuestion2,
   strings.chat.exampleQuestion3,
   strings.chat.exampleQuestion4,
 ];
+
+function hasText(m: ChatMessage) {
+  return m.parts.some((p) => p.type === "text" && p.text.trim() !== "");
+}
 
 export function Chat() {
   const [input, setInput] = useState("");
@@ -88,33 +94,41 @@ export function Chat() {
           </div>
         )}
 
-        {messages.map((m) => (
-          <Card
-            key={m.id}
-            className={cn(
-              "w-fit gap-2 rounded-2xl px-4 py-3 shadow-md ring-1 ring-foreground/15",
-              m.role === "user"
-                ? "ml-auto max-w-[80%] p-3 items-end"
-                : "max-w-[90%] p-3",
-            )}
-          >
-            <div className="space-y-2">
-              {m.parts.map((p, i) =>
-                p.type === "text" ? (
-                  <ReactMarkdown key={i}>{p.text}</ReactMarkdown>
-                ) : null,
+        {messages.map((m) => {
+          const isStopped = stoppedIds.has(m.id);
+          const sources = m.metadata?.sources ?? [];
+
+          if (m.role === "assistant" && !hasText(m) && !isStopped) {
+            return null;
+          }
+          return (
+            <Card
+              key={m.id}
+              className={cn(
+                "w-fit gap-2 rounded-2xl px-4 py-3 shadow-md ring-1 ring-foreground/15",
+                m.role === "user"
+                  ? "ml-auto max-w-[80%] p-3 items-end"
+                  : "max-w-[90%] p-3",
               )}
-            </div>
-            {stoppedIds.has(m.id) && (
-              <p className="text-sm text-muted-foreground">
-                {strings.chat.stopped}
-              </p>
-            )}
-            {m.role === "assistant" && m.metadata?.sources && (
-              <Sources sources={m.metadata.sources} />
-            )}
-          </Card>
-        ))}
+            >
+              <div className="space-y-2">
+                {m.parts.map((p, i) =>
+                  p.type === "text" ? (
+                    <ReactMarkdown key={i}>{p.text}</ReactMarkdown>
+                  ) : null,
+                )}
+              </div>
+              {stoppedIds.has(m.id) && (
+                <p className="text-sm text-muted-foreground">
+                  {strings.chat.stopped}
+                </p>
+              )}
+              {m.role === "assistant" && sources && (
+                <Sources sources={sources} />
+              )}
+            </Card>
+          );
+        })}
 
         {status === "submitted" && (
           <p className="text-muted-foreground">{strings.chat.thinking}</p>

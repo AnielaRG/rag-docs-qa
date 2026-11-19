@@ -5,11 +5,12 @@ import { strings } from "@/lib/strings";
 
 export function Sources({ sources }: { sources: Source[] }) {
   if (sources.length === 0) {
-    return (
-      <p className="mt-2 text-sm text-muted-foreground">
-        {strings.sources.empty}
-      </p>
-    );
+    // return (
+    //   <p className="mt-2 text-sm text-muted-foreground">
+    //     {strings.sources.empty}
+    //   </p>
+    // );
+    return null;
   }
 
   return (

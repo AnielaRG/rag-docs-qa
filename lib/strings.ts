@@ -2,11 +2,11 @@ export const strings = {
   chat: {
     title: "Docs Q&A: Kartoteka",
     example: "Zadaj pytanie o dokumentację, np.",
-    exampleQuestion1: "„Jak zgłosić urlop?”",
-    exampleQuestion2: "„Czy mogę zrobić deploy w piatek?”",
+    exampleQuestion1: "Jak zgłosić urlop?",
+    exampleQuestion2: "Czy mogę zrobić deploy w piatek?",
     exampleQuestion3:
-      "„Zgubiłem laptop, co mam zrobić? Od kiedy mogę mieć dyzur on-call?”",
-    exampleQuestion4: "„Jak ugotować pierogi?”",
+      "Zgubiłem laptop, co mam zrobić? Od kiedy mogę mieć dyzur on-call?",
+    exampleQuestion4: "Jak ugotować pierogi?",
     placeholder: "Twoje pytanie…",
     send: "Wyślij",
     stop: "Zatrzymaj",
